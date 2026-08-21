@@ -1,0 +1,11 @@
+C:\dev\lightstone\src\OrdersAndInventory.Domain\bin\Debug\net8.0\OrdersAndInventory.Domain.deps.json
+C:\dev\lightstone\src\OrdersAndInventory.Domain\bin\Debug\net8.0\OrdersAndInventory.Domain.dll
+C:\dev\lightstone\src\OrdersAndInventory.Domain\bin\Debug\net8.0\OrdersAndInventory.Domain.pdb
+C:\dev\lightstone\src\OrdersAndInventory.Domain\obj\Debug\net8.0\OrdersAndInventory.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\dev\lightstone\src\OrdersAndInventory.Domain\obj\Debug\net8.0\OrdersAndInventory.Domain.AssemblyInfoInputs.cache
+C:\dev\lightstone\src\OrdersAndInventory.Domain\obj\Debug\net8.0\OrdersAndInventory.Domain.AssemblyInfo.cs
+C:\dev\lightstone\src\OrdersAndInventory.Domain\obj\Debug\net8.0\OrdersAndInventory.Domain.csproj.CoreCompileInputs.cache
+C:\dev\lightstone\src\OrdersAndInventory.Domain\obj\Debug\net8.0\OrdersAndInventory.Domain.dll
+C:\dev\lightstone\src\OrdersAndInventory.Domain\obj\Debug\net8.0\refint\OrdersAndInventory.Domain.dll
+C:\dev\lightstone\src\OrdersAndInventory.Domain\obj\Debug\net8.0\OrdersAndInventory.Domain.pdb
+C:\dev\lightstone\src\OrdersAndInventory.Domain\obj\Debug\net8.0\ref\OrdersAndInventory.Domain.dll

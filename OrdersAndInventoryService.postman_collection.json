@@ -1,0 +1,423 @@
+{
+  "info": {
+    "_postman_id": "8f3b14d2-28a1-4347-8cfb-6f4e1f74811a",
+    "name": "Orders and Inventory Service API",
+    "description": "Production-ready Postman Collection for testing Orders & Inventory Service (.NET 8 Clean Architecture with SQL Server).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Health Checks",
+      "item": [
+        {
+          "name": "Liveness Probe (/health)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Basic liveness check verifying the service process is up and responding."
+          },
+          "response": []
+        },
+        {
+          "name": "Readiness Probe (/health/ready)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health/ready",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health",
+                "ready"
+              ]
+            },
+            "description": "Readiness check verifying active connectivity to Microsoft SQL Server."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2. Products & Inventory",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ]
+            },
+            "description": "Retrieves the complete list of products and current available stock levels."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by SKU",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/LAPTOP-001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "LAPTOP-001"
+              ]
+            },
+            "description": "Retrieves a single product by its unique SKU."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sku\": \"PROD-KEYBOARD-RGB\",\n  \"name\": \"Mechanical RGB Gaming Keyboard\",\n  \"price\": 129.99,\n  \"stock\": 100\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ]
+            },
+            "description": "Creates a new product with initial stock level."
+          },
+          "response": []
+        },
+        {
+          "name": "Adjust Stock (Increase Stock)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"delta\": 25\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/LAPTOP-001/adjust-stock",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "LAPTOP-001",
+                "adjust-stock"
+              ]
+            },
+            "description": "Adjusts stock for a product by adding delta (e.g. +25 items)."
+          },
+          "response": []
+        },
+        {
+          "name": "Adjust Stock (Decrease Stock)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"delta\": -5\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/LAPTOP-001/adjust-stock",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "LAPTOP-001",
+                "adjust-stock"
+              ]
+            },
+            "description": "Adjusts stock for a product by deducting delta (e.g. -5 items)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3. Orders & Idempotency",
+      "item": [
+        {
+          "name": "Submit New Order (201 Created)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"external_order_id\": \"ORD-TEST-001\",\n  \"placed_at\": \"2026-08-21T10:30:00Z\",\n  \"items\": [\n    {\n      \"sku\": \"LAPTOP-001\",\n      \"qty\": 2,\n      \"unit_price\": 1499.99\n    },\n    {\n      \"sku\": \"MOUSE-002\",\n      \"qty\": 1,\n      \"unit_price\": 49.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders"
+              ]
+            },
+            "description": "Submits a new multi-item order. Atomically locks and deducts inventory and returns 201 Created."
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Duplicate Order (Idempotent 200 OK)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"external_order_id\": \"ORD-TEST-001\",\n  \"placed_at\": \"2026-08-21T10:30:00Z\",\n  \"items\": [\n    {\n      \"sku\": \"LAPTOP-001\",\n      \"qty\": 2,\n      \"unit_price\": 1499.99\n    },\n    {\n      \"sku\": \"MOUSE-002\",\n      \"qty\": 1,\n      \"unit_price\": 49.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders"
+              ]
+            },
+            "description": "Submits the identical external_order_id. Returns 200 OK with is_duplicate: true without deducting stock a second time."
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Order - Insufficient Stock (422 Unprocessable)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"external_order_id\": \"ORD-EXCEED-001\",\n  \"placed_at\": \"2026-08-21T11:00:00Z\",\n  \"items\": [\n    {\n      \"sku\": \"LAPTOP-001\",\n      \"qty\": 99999,\n      \"unit_price\": 1499.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders"
+              ]
+            },
+            "description": "Attempts to purchase more stock than available. Rolls back the transaction and returns 422 with available stock details."
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Order - Non-Existent SKU (404 Not Found)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"external_order_id\": \"ORD-INVALID-SKU\",\n  \"placed_at\": \"2026-08-21T11:30:00Z\",\n  \"items\": [\n    {\n      \"sku\": \"NON-EXISTENT-SKU-999\",\n      \"qty\": 1,\n      \"unit_price\": 99.99\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders"
+              ]
+            },
+            "description": "Attempts to purchase an unknown SKU. Returns 404 Not Found."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "4. Daily Sales Summary",
+      "item": [
+        {
+          "name": "Get Daily Sales Summary (Date Range)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sales/daily-summary?startDate=2026-08-01&endDate=2026-08-31",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sales",
+                "daily-summary"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2026-08-01",
+                  "description": "Start date in yyyy-MM-dd format"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2026-08-31",
+                  "description": "End date in yyyy-MM-dd format"
+                }
+              ]
+            },
+            "description": "Fast Dapper-powered aggregated sales query returning daily totals and per-product breakdown."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Daily Sales Summary (Single Day)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sales/daily-summary?startDate=2026-08-21&endDate=2026-08-21",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sales",
+                "daily-summary"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2026-08-21"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2026-08-21"
+                }
+              ]
+            },
+            "description": "Retrieves aggregated sales specifically for today."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

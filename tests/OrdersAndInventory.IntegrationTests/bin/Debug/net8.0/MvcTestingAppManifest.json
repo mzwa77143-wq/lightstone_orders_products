@@ -1,0 +1,6 @@
+{
+  "OrdersAndInventory.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\dev\\lightstone\\src\\OrdersAndInventory.Api",
+  "OrdersAndInventory.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\dev\\lightstone\\src\\OrdersAndInventory.Application",
+  "OrdersAndInventory.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\dev\\lightstone\\src\\OrdersAndInventory.Domain",
+  "OrdersAndInventory.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\dev\\lightstone\\src\\OrdersAndInventory.Infrastructure"
+}
