@@ -12,6 +12,7 @@ public interface IApplicationDbContext
     DbSet<OrderItem> OrderItems { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+    IExecutionStrategy CreateExecutionStrategy();
     Task<IDbContextTransaction> BeginTransactionAsync(IsolationLevel isolationLevel, CancellationToken cancellationToken = default);
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
     IDbConnection GetDbConnection();

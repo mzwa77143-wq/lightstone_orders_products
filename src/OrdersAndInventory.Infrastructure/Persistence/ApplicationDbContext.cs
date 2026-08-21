@@ -17,6 +17,11 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
 
+    public IExecutionStrategy CreateExecutionStrategy()
+    {
+        return Database.CreateExecutionStrategy();
+    }
+
     public Task<IDbContextTransaction> BeginTransactionAsync(IsolationLevel isolationLevel, CancellationToken cancellationToken = default)
     {
         return Database.BeginTransactionAsync(isolationLevel, cancellationToken);

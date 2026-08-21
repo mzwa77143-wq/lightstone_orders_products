@@ -1,0 +1,29 @@
+## Build and Compilation output
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+## Visual Studio / Rider / IDE artifacts
+.vs/
+.idea/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.userprefs
+
+## Test & Code Coverage results
+[Tt]est[Rr]esults/
+*.trx
+*.coverage
+*.coveragexml
+
+## Database files generated during testing
+*.db
+*.db-shm
+*.db-wal
+
+## OS files
+.DS_Store
+Thumbs.db

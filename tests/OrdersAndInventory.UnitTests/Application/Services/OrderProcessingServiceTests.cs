@@ -29,8 +29,33 @@ public class OrderProcessingServiceTests
     {
         _mockDateTimeProvider.Setup(d => d.UtcNow).Returns(new DateTime(2026, 8, 20, 12, 0, 0, DateTimeKind.Utc));
         _mockContext
+            .Setup(c => c.CreateExecutionStrategy())
+            .Returns(new TestExecutionStrategy());
+        _mockContext
             .Setup(c => c.BeginTransactionAsync(It.IsAny<IsolationLevel>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(_mockTransaction.Object);
+    }
+
+    private class TestExecutionStrategy : IExecutionStrategy
+    {
+        public bool RetriesOnFailure => false;
+
+        public TResult Execute<TState, TResult>(
+            TState state,
+            Func<DbContext, TState, TResult> operation,
+            Func<DbContext, TState, ExecutionResult<TResult>>? verifySucceeded)
+        {
+            return operation(null!, state);
+        }
+
+        public Task<TResult> ExecuteAsync<TState, TResult>(
+            TState state,
+            Func<DbContext, TState, CancellationToken, Task<TResult>> operation,
+            Func<DbContext, TState, CancellationToken, Task<ExecutionResult<TResult>>>? verifySucceeded,
+            CancellationToken cancellationToken = default)
+        {
+            return operation(null!, state, cancellationToken);
+        }
     }
 
     [Fact]
